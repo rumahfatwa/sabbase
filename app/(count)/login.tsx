@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { View, TextInput, TouchableOpacity, Text } from 'react-native'
 import { supabase } from "../../lib/subbase"
-import { router } from 'expo-router'
+import { router,Stack} from 'expo-router'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('')
@@ -43,10 +43,13 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
-      <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 32 }}>Login</Text>
 
-      <TextInput
+    
+    <View style={{ flex: 1, justifyContent: 'center', padding: 24, alignItems:"center"}}>
+        <Stack.Screen options={{ headerShown: false }} />
+      <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 32 }}>Login</Text>
+   <View style = {{maxWidth: 500,width:"100%"}}>
+ <TextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => { setEmail(text); setErrorMsg('') }}
@@ -69,6 +72,9 @@ export default function LoginScreen() {
         borderRadius: 8,
         marginBottom: 8,
       }}>
+        <View style = {{}}>
+            
+        </View>
         <TextInput
           placeholder="Password"
           value={password}
@@ -109,6 +115,9 @@ export default function LoginScreen() {
       >
         <Text style={{ textAlign: 'center', color: '#1C1C1C' }}>Belum punya akun? Register</Text>
       </TouchableOpacity>
+   </View>
+     
     </View>
+    
   )
 }

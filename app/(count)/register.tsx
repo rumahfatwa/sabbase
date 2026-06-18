@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { View, TextInput, TouchableOpacity, Text } from 'react-native'
 import { supabase } from "../../lib/subbase"
-import { router } from 'expo-router'
+import { router,Stack } from 'expo-router'
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('')
@@ -25,10 +25,11 @@ export default function RegisterScreen() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 24, alignItems:"center" }}>
+        <Stack.Screen options={{ headerShown: false }} />
       <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 32 }}>Register</Text>
-
-      <TextInput
+  <View style ={{maxWidth: 500,width:"100%"}}>
+         <TextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => { setEmail(text); setErrorMsg('') }}
@@ -84,6 +85,8 @@ export default function RegisterScreen() {
       >
         <Text style={{ textAlign: 'center', color: '#3ECF8E' }}>Sudah punya akun? Login</Text>
       </TouchableOpacity>
+  </View>
+    
     </View>
   )
 }
