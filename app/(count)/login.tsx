@@ -1,34 +1,44 @@
 import { useState } from 'react'
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, Platform } from 'react-native'
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { supabase } from "../../lib/subbase"
 import { router, Stack } from 'expo-router'
 
-export default function RegisterScreen() {
+export default function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
-  const showAlert = (title: string, message: string) => {
-    if (Platform.OS === 'web') {
-      window.alert(`${title}: ${message}`)
-    } else {
-      Alert.alert(title, message)
-    }
-  }
-
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     setErrorMsg('')
+    if (!email && !password) {
+      setErrorMsg('Anda belum mendaftar, silahkan register terlebih dahulu.')
+      return
+    }
+    if (!email) {
+      setErrorMsg('Email tidak boleh kosong.')
+      return
+    }
+    if (!password) {
+      setErrorMsg('Password tidak boleh kosong.')
+      return
+    }
+
     setLoading(true)
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
 
     if (error) {
-      setErrorMsg(error.message)
+      if (error.message.includes('Invalid login credentials')) {
+        setErrorMsg('Email atau password salah. Jika belum mendaftar, silahkan register.')
+      } else if (error.message.includes('Email not confirmed')) {
+        setErrorMsg('Email belum dikonfirmasi, cek inbox email kamu.')
+      } else {
+        setErrorMsg(error.message)
+      }
     } else {
-      showAlert('Sukses', 'Akun berhasil dibuat! Silahkan login.')
-      router.replace('/(count)/login')
+      router.replace('/(count)/home')
     }
   }
 
@@ -37,8 +47,8 @@ export default function RegisterScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <View style={styles.card}>
-        <Text style={styles.title}>Buat Akun</Text>
-        <Text style={styles.subtitle}>Daftar untuk mulai menggunakan aplikasi</Text>
+        <Text style={styles.title}>Selamat Datang</Text>
+        <Text style={styles.subtitle}>Masuk ke akun kamu untuk melanjutkan</Text>
 
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Email</Text>
@@ -82,12 +92,12 @@ export default function RegisterScreen() {
         )}
 
         <TouchableOpacity
-          onPress={handleRegister}
+          onPress={handleLogin}
           disabled={loading}
           style={[styles.btnPrimary, loading && styles.btnDisabled]}
         >
           <Text style={styles.btnPrimaryText}>
-            {loading ? 'Memproses...' : 'Daftar Sekarang'}
+            {loading ? 'Memproses...' : 'Masuk'}
           </Text>
         </TouchableOpacity>
 
@@ -98,11 +108,11 @@ export default function RegisterScreen() {
         </View>
 
         <TouchableOpacity
-          onPress={() => router.replace('/(count)/login')}
+          onPress={() => router.replace('/(count)/register')}
           style={styles.btnSecondary}
         >
           <Text style={styles.btnSecondaryText}>
-            Sudah punya akun? <Text style={styles.btnSecondaryBold}>Masuk</Text>
+            Belum punya akun? <Text style={styles.btnSecondaryBold}>Daftar</Text>
           </Text>
         </TouchableOpacity>
       </View>
@@ -190,7 +200,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   btnPrimary: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#3ECF8E',
     padding: 15,
     borderRadius: 12,
     alignItems: 'center',

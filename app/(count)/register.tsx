@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, Platform } from 'react-native'
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { supabase } from "../../lib/subbase"
 import { router, Stack } from 'expo-router'
 
@@ -10,14 +10,6 @@ export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const showAlert = (title: string, message: string) => {
-    if (Platform.OS === 'web') {
-      window.alert(`${title}: ${message}`)
-    } else {
-      Alert.alert(title, message)
-    }
-  }
-
   const handleRegister = async () => {
     setErrorMsg('')
     setLoading(true)
@@ -27,7 +19,7 @@ export default function RegisterScreen() {
     if (error) {
       setErrorMsg(error.message)
     } else {
-      showAlert('Sukses', 'Akun berhasil dibuat! Silahkan login.')
+      window.alert('Akun berhasil dibuat! Silahkan login.')
       router.replace('/(count)/login')
     }
   }
@@ -101,9 +93,7 @@ export default function RegisterScreen() {
           onPress={() => router.replace('/(count)/login')}
           style={styles.btnSecondary}
         >
-          <Text style={styles.btnSecondaryText}>
-            Sudah punya akun? <Text style={styles.btnSecondaryBold}>Masuk</Text>
-          </Text>
+          <Text style={styles.btnSecondaryText}>Sudah punya akun? <Text style={styles.btnSecondaryBold}>Masuk</Text></Text>
         </TouchableOpacity>
       </View>
     </View>
