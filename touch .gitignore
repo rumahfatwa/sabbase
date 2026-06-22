@@ -1,0 +1,20 @@
+# Kredensial dan Token Rahasia
+.env
+.env.local
+.env.*.local
+
+# Dependensi (Pustaka yang ukurannya besar)
+node_modules/
+target/
+
+# Folder Platform Deployment & Cache Lokal
+.vercel
+.netlify
+.expo/
+.metro/
+dist/
+build/
+
+# Pengaturan Editor / IDE
+.vscode/
+.idea/
